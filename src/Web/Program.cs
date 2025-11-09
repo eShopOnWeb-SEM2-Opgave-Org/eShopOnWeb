@@ -62,6 +62,14 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddCoreServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration);
 
+// Strangler services
+var shouldUseCatalogMicroservice = Environment.GetEnvironmentVariable("USE_CATALOG_MICROSERVICE", EnvironmentVariableTarget.Process) ?? "false";
+if (shouldUseCatalogMicroservice is "true")
+{
+    var catalogUrl = Environment.GetEnvironmentVariable("CATALOG_SERVICE_URL", EnvironmentVariableTarget.Process) ?? "http://localhost:52080";
+    builder.Services.AddCatalogGatewayServices(catalogUrl);
+}
+
 // Add memory cache services
 builder.Services.AddMemoryCache();
 builder.Services.AddRouting(options =>
