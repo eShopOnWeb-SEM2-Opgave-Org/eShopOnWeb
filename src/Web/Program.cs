@@ -67,7 +67,7 @@ var shouldUseCatalogMicroservice = Environment.GetEnvironmentVariable("USE_CATAL
 if (shouldUseCatalogMicroservice is "true")
 {
     var catalogUrl = Environment.GetEnvironmentVariable("CATALOG_SERVICE_URL", EnvironmentVariableTarget.Process) ?? "http://localhost:52080";
-    builder.Services.AddCatalogGatewayServices(catalogUrl);
+    builder.Services.AddCatalogHttpServices(catalogUrl);
 }
 
 // Add memory cache services

@@ -49,7 +49,7 @@ public class CatalogItemHttpClient : IRepository<CatalogItem>, IReadRepository<C
         throw new NotImplementedException();
     }
 
-    private record PagedItemResponse(IEnumerable<CatalogItem> CatalogItems, int PageCount);
+    private sealed record PagedItemResponse(IEnumerable<CatalogItem> CatalogItems, int PageCount);
     public async Task<int> CountAsync(ISpecification<CatalogItem> specification, CancellationToken cancellationToken = default)
     {
         try
@@ -71,7 +71,8 @@ public class CatalogItemHttpClient : IRepository<CatalogItem>, IReadRepository<C
                 var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 _logger.LogError(
-                    "Response from server did not indicate success. Status = {Status}, Message = {Message}, CorrelationId = {CorrelationId}",
+                    "[Origin: {Origin}] Response from server did not indicate success. Status = {Status}, Message = {Message}, CorrelationId = {CorrelationId}",
+                    nameof(CatalogItemHttpClient) + nameof(GetByIdAsync),
                     response.StatusCode.ToString(),
                     errorMessage,
                     correlationId.ToString()
